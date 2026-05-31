@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Karawang Tourism Guide — Dari Pantai Hingga Sejarah</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── RESET & BASE ─────────────────────────── */
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+
+    :root {
+      --cream:   #F5EFE0;
+      --sand:    #E8D9BC;
+      --rust:    #C4572A;
+      --terracotta: #D4724A;
+      --ochre:   #C89B3C;
+      --forest:  #2D5016;
+      --teal:    #1A5C58;
+      --navy:    #0D2B3E;
+      --dark:    #1A1208;
+      --white:   #FDFAF4;
+      --shadow:  rgba(13,43,62,0.18);
+    }
+
+    body {
+      background: var(--cream);
+      color: var(--dark);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── NOISE OVERLAY ────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
+
+    /* ─── SCROLLBAR ─────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--sand); }
+    ::-webkit-scrollbar-thumb { background: var(--rust); border-radius: 3px; }
+
+    /* ─── NAV ───────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 4rem;
+      background: transparent;
+      transition: background 0.4s, backdrop-filter 0.4s, box-shadow 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(245,239,224,0.92);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 2px 20px var(--shadow);
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 2px;
+      color: var(--white);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    nav.scrolled .nav-logo { color: var(--rust); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.9);
+      transition: color 0.3s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0; right: 0;
+      height: 1px;
+      background: var(--ochre);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    nav.scrolled .nav-links a { color: var(--navy); }
+    .nav-burger { display: none; flex-direction: column; gap:5px; cursor:pointer; }
+    .nav-burger span { width:24px; height:2px; background:white; transition:0.3s; }
+    nav.scrolled .nav-burger span { background: var(--navy); }
+
+    /* ─── HERO ──────────────────────────────────── */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 650px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(160deg, rgba(13,43,62,0.65) 0%, rgba(196,87,42,0.4) 55%, rgba(26,92,88,0.5) 100%),
+        url('https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Karawang_coast.jpg/1280px-Karawang_coast.jpg') center/cover no-repeat;
+      transform: scale(1.05);
+      animation: heroZoom 18s ease-in-out infinite alternate;
+    }
+    /* fallback gradient if image fails */
+    .hero-bg-fallback {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--teal) 40%, var(--rust) 100%);
+      z-index: -1;
+    }
+    @keyframes heroZoom {
+      from { transform: scale(1.05); }
+      to   { transform: scale(1.12); }
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      color: var(--white);
+      padding: 2rem;
+      max-width: 900px;
+    }
+    .hero-eyebrow {
+      font-size: 0.8rem;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--ochre);
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.3s forwards;
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 900;
+      line-height: 1.0;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.5s forwards;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--ochre);
+    }
+    .hero-subtitle {
+      font-size: clamp(0.95rem, 2vw, 1.2rem);
+      font-weight: 300;
+      max-width: 580px;
+      margin: 0 auto 2.5rem;
+      opacity: 0.9;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.7s forwards;
+    }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--rust);
+      color: var(--white);
+      text-decoration: none;
+      padding: 1rem 2.2rem;
+      border-radius: 3px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: background 0.3s, transform 0.2s;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.9s forwards;
+    }
+    .hero-cta:hover { background: var(--terracotta); transform: translateY(-2px); }
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      color: rgba(255,255,255,0.6);
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      animation: pulse 2s infinite;
+    }
+    .hero-scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.6), transparent);
+    }
+    @keyframes pulse {
+      0%,100% { opacity:1; transform:translateX(-50%) translateY(0); }
+      50%      { opacity:0.5; transform:translateX(-50%) translateY(6px); }
+    }
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(28px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* ─── SECTION SHARED ────────────────────────── */
+    section { padding: 6rem 0; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+    .section-tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--rust);
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--navy);
+      margin-bottom: 1.2rem;
+    }
+    .section-lead {
+      font-size: 1.05rem;
+      color: #5a5040;
+      max-width: 600px;
+      line-height: 1.75;
+    }
+    .divider {
+      width: 60px;
+      height: 3px;
+      background: var(--ochre);
+      margin: 1.2rem 0;
+    }
+
+    /* ─── INTRO ─────────────────────────────────── */
+    .intro { background: var(--white); }
+    .intro-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .intro-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 2.5rem;
+    }
+    .stat-card {
+      padding: 1.5rem;
+      border-left: 3px solid var(--ochre);
+      background: var(--cream);
+    }
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.8rem;
+      color: var(--rust);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.78rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #7a6a50;
+      margin-top: 0.3rem;
+    }
+    .intro-image-wrap {
+      position: relative;
+    }
+    .intro-image-wrap img {
+      width: 100%;
+      height: 500px;
+      object-fit: cover;
+      display: block;
+    }
+    .intro-image-wrap::before {
+      content: '';
+      position: absolute;
+      top: -18px; right: -18px;
+      width: 100%; height: 100%;
+      border: 3px solid var(--ochre);
+      z-index: 0;
+    }
+    .intro-image-wrap img { position: relative; z-index: 1; }
+    .intro-badge {
+      position: absolute;
+      bottom: -20px; left: -20px;
+      z-index: 2;
+      background: var(--rust);
+      color: var(--white);
+      padding: 1.2rem 1.5rem;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+      line-height: 1.3;
+    }
+
+    /* ─── DESTINATIONS ──────────────────────────── */
+    .destinations { background: var(--cream); }
+    .dest-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 3.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .filter-tabs {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 0.5rem 1.2rem;
+      border: 1.5px solid var(--sand);
+      background: transparent;
+      color: var(--navy);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.25s;
+      border-radius: 2px;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--rust);
+      border-color: var(--rust);
+      color: white;
+    }
+
+    /* ─── CARD GRID ─────────────────────────────── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+    .card {
+      background: var(--white);
+      overflow: hidden;
+      transition: transform 0.35s, box-shadow 0.35s;
+      cursor: pointer;
+    }
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 24px 50px var(--shadow);
+    }
+    .card.hidden { display: none; }
+    .card-img-wrap {
+      position: relative;
+      height: 230px;
+      overflow: hidden;
+    }
+    .card-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .card:hover .card-img-wrap img { transform: scale(1.08); }
+    .card-category {
+      position: absolute;
+      top: 1rem; left: 1rem;
+      padding: 0.3rem 0.8rem;
+      font-size: 0.68rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: white;
+      border-radius: 2px;
+    }
+    .cat-pantai   { background: var(--teal); }
+    .cat-sejarah  { background: var(--navy); }
+    .cat-alam     { background: var(--forest); }
+    .cat-rekreasi { background: var(--rust); }
+    .card-body { padding: 1.5rem; }
+    .card-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 0.5rem;
+    }
+    .card-meta {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.78rem;
+      color: #8a7a60;
+      margin-bottom: 0.8rem;
+      flex-wrap: wrap;
+    }
+    .card-meta span { display: flex; align-items: center; gap: 0.3rem; }
+    .card-desc {
+      font-size: 0.88rem;
+      color: #5a5040;
+      line-height: 1.65;
+      margin-bottom: 1.2rem;
+    }
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1rem;
+      border-top: 1px solid var(--sand);
+    }
+    .card-price {
+      font-size: 0.8rem;
+      color: var(--rust);
+      font-weight: 600;
+    }
+    .card-link {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--teal);
+      text-decoration: none;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: gap 0.2s;
+    }
+    .card-link:hover { gap: 0.6rem; }
+
+    /* ─── FEATURED / BANNER ─────────────────────── */
+    .featured {
+      background: var(--navy);
+      color: var(--white);
+      padding: 0;
+      overflow: hidden;
+    }
+    .featured-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 560px;
+    }
+    .featured-img {
+      position: relative;
+      overflow: hidden;
+    }
+    .featured-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.85);
+      transition: transform 0.8s ease;
+    }
+    .featured-img:hover img { transform: scale(1.04); }
+    .featured-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(13,43,62,0.4), transparent);
+    }
+    .featured-text {
+      padding: 5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: var(--navy);
+    }
+    .featured-text .section-tag { color: var(--ochre); }
+    .featured-text .section-title { color: var(--white); margin-bottom: 1rem; }
+    .featured-text .divider { background: var(--rust); }
+    .featured-body {
+      font-size: 0.95rem;
+      color: rgba(253,250,244,0.8);
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+    .featured-facts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      margin-bottom: 2.5rem;
+    }
+    .fact {
+      border-left: 2px solid var(--ochre);
+      padding-left: 0.8rem;
+    }
+    .fact-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--ochre);
+    }
+    .fact-value {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--white);
+      margin-top: 0.2rem;
+    }
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      border: 1.5px solid var(--ochre);
+      color: var(--ochre);
+      padding: 0.85rem 2rem;
+      text-decoration: none;
+      font-size: 0.82rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-weight: 600;
+      transition: all 0.3s;
+      width: fit-content;
+    }
+    .btn-outline:hover {
+      background: var(--ochre);
+      color: var(--navy);
+    }
+
+    /* ─── TIPS ──────────────────────────────────── */
+    .tips { background: var(--white); }
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    .tip-card {
+      padding: 2rem 1.5rem;
+      background: var(--cream);
+      border-bottom: 3px solid transparent;
+      transition: border-color 0.3s, transform 0.3s;
+      text-align: center;
+    }
+    .tip-card:hover {
+      border-color: var(--rust);
+      transform: translateY(-5px);
+    }
+    .tip-icon {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .tip-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 0.6rem;
+    }
+    .tip-text {
+      font-size: 0.85rem;
+      color: #6a5c44;
+      line-height: 1.7;
+    }
+
+    /* ─── GALLERY STRIP ─────────────────────────── */
+    .gallery-strip {
+      background: var(--dark);
+      padding: 3rem 0;
+      overflow: hidden;
+    }
+    .gallery-track {
+      display: flex;
+      gap: 1rem;
+      animation: marquee 30s linear infinite;
+      width: max-content;
+    }
+    .gallery-track:hover { animation-play-state: paused; }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .gallery-item {
+      width: 260px;
+      height: 180px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.8) saturate(1.1);
+      transition: filter 0.3s, transform 0.3s;
+    }
+    .gallery-item:hover img {
+      filter: brightness(1) saturate(1.3);
+      transform: scale(1.06);
+    }
+
+    /* ─── MAP SECTION ───────────────────────────── */
+    .map-section { background: var(--cream); }
+    .map-inner {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .map-legend { }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--sand);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .legend-item:hover { color: var(--rust); }
+    .legend-dot {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .legend-name {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    .legend-dist {
+      font-size: 0.75rem;
+      color: #8a7a60;
+      margin-top: 0.15rem;
+    }
+    .map-embed {
+      border-radius: 2px;
+      overflow: hidden;
+      box-shadow: 0 8px 30px var(--shadow);
+      height: 430px;
+    }
+    .map-embed iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* ─── MODAL ─────────────────────────────────── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(13,43,62,0.85);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .modal {
+      background: var(--white);
+      max-width: 820px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: scale(0.92);
+      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .modal-overlay.open .modal { transform: scale(1); }
+    .modal-img { width: 100%; height: 340px; object-fit: cover; display: block; }
+    .modal-body { padding: 2.5rem; }
+    .modal-category {
+      font-size: 0.72rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--rust);
+      margin-bottom: 0.5rem;
+    }
+    .modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 0.3rem;
+    }
+    .modal-meta {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.82rem;
+      color: #8a7a60;
+      margin-bottom: 1.2rem;
+      flex-wrap: wrap;
+    }
+    .modal-desc {
+      font-size: 0.95rem;
+      color: #4a3c28;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+    .modal-info {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem;
+      padding: 1.2rem;
+      background: var(--cream);
+      margin-bottom: 1.5rem;
+    }
+    .info-item { text-align: center; }
+    .info-label {
+      font-size: 0.68rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #8a7a60;
+      margin-bottom: 0.3rem;
+    }
+    .info-val {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--navy);
+    }
+    .modal-close {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      background: var(--dark);
+      color: white;
+      border: none;
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .modal-close:hover { background: var(--rust); }
+    .modal-overlay { position: relative; }
+    /* re-fix for fixed */
+    .modal-overlay { position: fixed; }
+    .modal { position: relative; }
+
+    /* ─── FOOTER ─────────────────────────────────── */
+    footer {
+      background: var(--dark);
+      color: var(--cream);
+      padding: 5rem 0 2rem;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+    .footer-brand {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 3px;
+      color: var(--ochre);
+      margin-bottom: 1rem;
+    }
+    .footer-tagline {
+      font-size: 0.88rem;
+      color: rgba(245,239,224,0.6);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+    .footer-socials { display: flex; gap: 0.8rem; }
+    .social-btn {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      text-decoration: none;
+      color: var(--cream);
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .social-btn:hover { border-color: var(--ochre); background: var(--ochre); color: var(--dark); }
+    .footer-col h4 {
+      font-size: 0.72rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--ochre);
+      margin-bottom: 1.2rem;
+      font-weight: 600;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li {
+      margin-bottom: 0.7rem;
+      font-size: 0.88rem;
+      color: rgba(245,239,224,0.7);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .footer-col ul li:hover { color: var(--cream); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: rgba(245,239,224,0.4);
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    /* ─── RESPONSIVE ────────────────────────────── */
+    @media (max-width: 1024px) {
+      .cards-grid { grid-template-columns: repeat(2, 1fr); }
+      .featured-inner { grid-template-columns: 1fr; }
+      .featured-img { height: 380px; }
+      .tips-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      .map-inner { grid-template-columns: 1fr; }
+      .intro-inner { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display:none; position:fixed; top:0; right:0; bottom:0; width:260px; background:var(--cream); flex-direction:column; gap:0; padding:5rem 2rem 2rem; z-index:999; transform:translateX(100%); transition:transform 0.35s; }
+      .nav-links.open { transform:translateX(0); display:flex; }
+      .nav-links a { color:var(--navy) !important; padding:1rem 0; border-bottom:1px solid var(--sand); font-size:1rem; }
+      .nav-burger { display:flex; z-index:1001; }
+      .hero-title { font-size: clamp(2.5rem, 10vw, 4rem); }
+      .cards-grid { grid-template-columns: 1fr; }
+      .tips-grid { grid-template-columns: 1fr 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .modal-info { grid-template-columns: 1fr 1fr; }
+      .featured-text { padding: 2.5rem; }
+      nav { padding: 1rem 1.5rem; }
+      section { padding: 4rem 0; }
+      .featured-facts { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .tips-grid { grid-template-columns: 1fr; }
+      .modal-info { grid-template-columns: 1fr; }
+      .intro-stats { grid-template-columns: 1fr; }
+    }
+
+    /* ─── SCROLL REVEAL ─────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+  </style>
+</head>
+
+<body>
+
+<!-- ══════ NAV ══════ -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">KARAWANG</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#destinations">Destinasi</a></li>
+    <li><a href="#featured">Unggulan</a></li>
+    <li><a href="#tips">Tips</a></li>
+    <li><a href="#peta">Peta</a></li>
+    <li><a href="#kontak">Kontak</a></li>
+  </ul>
+  <div class="nav-burger" id="burger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- ══════ HERO ══════ -->
+<section class="hero" id="home">
+  <div class="hero-bg-fallback"></div>
+  <div class="hero-bg" style="background-image: linear-gradient(160deg,rgba(13,43,62,.7) 0%,rgba(196,87,42,.45) 55%,rgba(26,92,88,.55) 100%), url('https://images.unsplash.com/photo-1596402184320-417e7178b2cd?w=1600&q=80') center/cover no-repeat;"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">✦ Selamat Datang di Karawang ✦</p>
+    <h1 class="hero-title">Dari <em>Pantai</em><br>Hingga Sejarah</h1>
+    <p class="hero-subtitle">Jelajahi keajaiban Karawang — kota yang menyimpan warisan peradaban tertua di Jawa, hamparan pantai utara yang memesona, dan alam pegunungan yang masih asri.</p>
+    <a href="#destinations" class="hero-cta">
+      Jelajahi Sekarang
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="hero-scroll-line"></div>
+  </div>
+</section>
+
+<!-- ══════ INTRO ══════ -->
+<section class="intro" id="intro">
+  <div class="container">
+    <div class="intro-inner">
+      <div>
+        <span class="section-tag reveal">Tentang Karawang</span>
+        <h2 class="section-title reveal reveal-delay-1">Surga Tersembunyi<br>di Pesisir Utara Jawa</h2>
+        <div class="divider reveal reveal-delay-2"></div>
+        <p class="section-lead reveal reveal-delay-2">Karawang bukan sekadar kota industri. Di balik denyut pabrik-pabriknya, tersimpan kekayaan alam dan sejarah yang luar biasa — mulai dari Candi Jiwa peninggalan Kerajaan Tarumanegara abad ke-5, pantai-pantai utara yang tenang, hingga air terjun di kaki Gunung Sanggabuana.</p>
+        <div class="intro-stats">
+          <div class="stat-card reveal reveal-delay-2">
+            <div class="stat-num">20+</div>
+            <div class="stat-label">Destinasi Wisata</div>
+          </div>
+          <div class="stat-card reveal reveal-delay-3">
+            <div class="stat-num">5</div>
+            <div class="stat-label">Kategori Wisata</div>
+          </div>
+          <div class="stat-card reveal reveal-delay-3">
+            <div class="stat-num">±60<span style="font-size:1.5rem">km</span></div>
+            <div class="stat-label">Dari Jakarta</div>
+          </div>
+          <div class="stat-card reveal reveal-delay-4">
+            <div class="stat-num">Abad 5</div>
+            <div class="stat-label">Sejarah Peradaban</div>
+          </div>
+        </div>
+      </div>
+      <div class="intro-image-wrap reveal reveal-delay-2">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Candi_Jiwa%2C_Situs_Batujaya%2C_Karawang.jpg/1280px-Candi_Jiwa%2C_Situs_Batujaya%2C_Karawang.jpg"
+             onerror="this.src='https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=800&q=80'"
+             alt="Candi Jiwa Batujaya Karawang" />
+        <div class="intro-badge">Candi Tertua<br>di Indonesia</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ DESTINATIONS ══════ -->
+<section class="destinations" id="destinations">
+  <div class="container">
+    <div class="dest-header">
+      <div>
+        <span class="section-tag reveal">Destinasi Pilihan</span>
+        <h2 class="section-title reveal reveal-delay-1">Wisata Terbaik<br>Karawang</h2>
+      </div>
+      <div class="filter-tabs reveal">
+        <button class="filter-btn active" data-filter="all">Semua</button>
+        <button class="filter-btn" data-filter="pantai">🌊 Pantai</button>
+        <button class="filter-btn" data-filter="sejarah">🏛️ Sejarah</button>
+        <button class="filter-btn" data-filter="alam">🌿 Alam</button>
+        <button class="filter-btn" data-filter="rekreasi">🎡 Rekreasi</button>
+      </div>
+    </div>
+
+    <div class="cards-grid" id="cardsGrid">
+
+      <!-- 1. Candi Jiwa -->
+      <div class="card reveal" data-cat="sejarah"
+           onclick="openModal('Candi Jiwa — Situs Batujaya','sejarah',
+           'https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Candi_Jiwa%2C_Situs_Batujaya%2C_Karawang.jpg/1280px-Candi_Jiwa%2C_Situs_Batujaya%2C_Karawang.jpg',
+           'Batujaya, Karawang Barat','08.00–18.00 WIB','Rp 5.000',
+           `Candi Jiwa adalah situs percandian Hindu-Buddha tertua di Indonesia, diperkirakan dibangun pada abad ke-4 hingga ke-5 Masehi oleh Kerajaan Tarumanegara. Candi berbentuk bujur sangkar (19×19 m) ini berdiri megah di tengah hamparan sawah Desa Segaran, Batujaya. Tidak seperti candi lainnya, Candi Jiwa tidak memiliki anak tangga maupun ukiran relief, namun bagian atasnya memiliki bentuk yang menyerupai bunga padma (teratai) — simbol kesucian dalam kepercayaan Buddha. Suasana persawahan yang mengelilinginya menjadikan tempat ini spot foto yang sangat instagramable sekaligus bernilai edukasi sejarah tinggi.`,
+           'Batujaya, Kec. Pakisjaya','~85 km dari Jakarta','Parkir tersedia')">
+        <div class="card-img-wrap">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Candi_Jiwa%2C_Situs_Batujaya%2C_Karawang.jpg/640px-Candi_Jiwa%2C_Situs_Batujaya%2C_Karawang.jpg"
+               onerror="this.src='https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=600&q=75'"
+               alt="Candi Jiwa Batujaya" loading="lazy"/>
+          <span class="card-category cat-sejarah">Sejarah</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-name">Candi Jiwa</h3>
+          <div class="card-meta">
+            <span>📍 Batujaya</span>
+            <span>⏰ 08.00–18.00</span>
+          </div>
+          <p class="card-desc">Candi Buddha tertua di Indonesia (abad 4–5 M), peninggalan Kerajaan Tarumanegara. Berdiri di tengah sawah yang eksotis, menjadikannya destinasi sejarah & foto yang wajib dikunjungi.</p>
+          <div class="card-footer">
+            <span class="card-price">Rp 5.000 / orang</span>
+            <span class="card-link">Lihat Detail →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Pantai Pelangi -->
+      <div class="card reveal reveal-delay-1" data-cat="pantai"
+           onclick="openModal('Pantai Pelangi','pantai',
+           'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=900&q=80',
+           'Desa Sungai Buntu, Kec. Pedes','07.00–18.00 WIB','Rp 15.000',
+           `Pantai Pelangi adalah salah satu pantai paling populer di Karawang, lokasinya sekitar 35 km dari pusat kota di Desa Sungai Buntu, Kecamatan Pedes. Pantai ini menawarkan hamparan pasir lembut dengan ombak yang relatif tenang, sangat aman untuk aktivitas keluarga. Yang membuat pantai ini spesial adalah ragam spot foto instagramable-nya, terutama saat senja ketika langit berwarna keemasan. Berbagai pilihan kuliner pinggir pantai tersedia dengan harga terjangkau. Pantai ini juga berdekatan dengan beberapa destinasi wisata pantai lain di sekitar Pedes, memudahkan kamu untuk mencicipi beberapa pantai dalam satu hari perjalanan.`,
+           'Kec. Pedes, 35 km dari pusat kota','~90 km dari Jakarta','Area parkir luas')">
+        <div class="card-img-wrap">
+          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=75"
+               alt="Pantai Pelangi Karawang" loading="lazy"/>
+          <span class="card-category cat-pantai">Pantai</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-name">Pantai Pelangi</h3>
+          <div class="card-meta">
+            <span>📍 Kec. Pedes</span>
+            <span>⏰ 07.00–18.00</span>
+          </div>
+          <p class="card-desc">Pantai hits di Karawang dengan pasir lembut dan ombak tenang. Spot foto senja yang memukau, kuliner pinggir pantai, dan suasana keluarga yang santai menjadi daya tarik utamanya.</p>
+          <div class="card-footer">
+            <span class="card-price">Rp 15.000 / orang</span>
+            <span class="card-link">Lihat Detail →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Curug Cigentis -->
+      <div class="card reveal reveal-delay-2" data-cat="alam"
+           onclick="openModal('Curug Cigentis','alam',
+           'https://images.unsplash.com/photo-1511576661531-b34d7da5d0bb?w=900&q=80',
+           'Kec. Tegalwaru, Kaki Gunung Sanggabuana','06.00–17.00 WIB','Rp 10.000',
+           `Curug Cigentis adalah air terjun paling terkenal di Karawang, terletak di kawasan Gunung Sanggabuana di Kecamatan Tegalwaru. Air terjun ini menawarkan pemandangan yang spektakuler dengan debit air yang cukup deras dan kolam alami di bawahnya yang menyegarkan. Untuk mencapainya, pengunjung perlu berjalan kaki sekitar 30–45 menit melalui trek alam yang menantang namun menyenangkan, dikelilingi hutan tropis yang rindang. Suasana yang sejuk dan segar membuatnya sempurna untuk healing dari kepenatan kota. Kawasan ini juga menjadi pintu masuk menuju Gunung Sanggabuana bagi para pendaki.`,
+           'Kec. Tegalwaru','~100 km dari Jakarta','Parkir, warung makan')">
+        <div class="card-img-wrap">
+          <img src="https://images.unsplash.com/photo-1511576661531-b34d7da5d0bb?w=600&q=75"
+               alt="Curug Cigentis Karawang" loading="lazy"/>
+          <span class="card-category cat-alam">Alam</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-name">Curug Cigentis</h3>
+          <div class="card-meta">
+            <span>📍 Gunung Sanggabuana</span>
+            <span>⏰ 06.00–17.00</span>
+          </div>
+          <p class="card-desc">Air terjun paling terkenal di Karawang, tersembunyi di kaki Gunung Sanggabuana. Trek alam yang menantang dibalas dengan kolam alami yang menyegarkan dan suasana hutan tropis.</p>
+          <div class="card-footer">
+            <span class="card-price">Rp 10.000 / orang</span>
+            <span class="card-link">Lihat Detail →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Pantai Tanjung Baru -->
+      <div class="card reveal" data-cat="pantai"
+           onclick="openModal('Pantai Tanjung Baru','pantai',
+           'https://images.unsplash.com/photo-1471922694854-ff1b63b20054?w=900&q=80',
+           'Desa Pasirjaya, Kec. Cilamaya','07.00–18.00 WIB','Rp 10.000',
+           `Pantai Tanjung Baru berlokasi di Desa Pasirjaya, Kecamatan Cilamaya, sekitar 45 km dari pusat kota Karawang. Pantai ini menawarkan suasana yang lebih tenang dan sepi dibandingkan pantai-pantai lainnya, menjadikannya pilihan ideal bagi mereka yang mencari ketenangan jauh dari keramaian. Deretan pohon-pohon rindang di pinggiran pantai memberikan keteduhan alami. Ombak yang relatif kecil membuatnya aman untuk berenang dan bermain pasir, terutama bagi anak-anak. Fasilitas yang tersedia cukup memadai dengan harga yang sangat terjangkau.`,
+           'Kec. Cilamaya, 45 km dari pusat kota','~100 km dari Jakarta','Parkir, warung')">
+        <div class="card-img-wrap">
+          <img src="https://images.unsplash.com/photo-1471922694854-ff1b63b20054?w=600&q=75"
+               alt="Pantai Tanjung Baru" loading="lazy"/>
+          <span class="card-category cat-pantai">Pantai</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-name">Pantai Tanjung Baru</h3>
+          <div class="card-meta">
+            <span>📍 Kec. Cilamaya</span>
+            <span>⏰ 07.00–18.00</span>
+          </div>
+          <p class="card-desc">Pantai tenang di pesisir Cilamaya yang dikelilingi pohon-pohon rindang. Ombak kecil dan suasana sepi menjadikannya surga tersembunyi yang ideal untuk bersantai bersama keluarga.</p>
+          <div class="card-footer">
+            <span class="card-price">Rp 10.000 / orang</span>
+            <span class="card-link">Lihat Detail →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Danau Cipule -->
+      <div class="card reveal reveal-delay-1" data-cat="alam"
+           onclick="openModal('Danau Cipule','alam',
+           'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=900&q=80',
+           'Kec. Ciampel, Karawang','07.00–17.00 WIB','Rp 10.000',
+           `Danau Cipule adalah destinasi wisata air tawar yang populer di Karawang, terletak di Kecamatan Ciampel. Danau ini terkenal sebagai venue olahraga air dan pernah digunakan sebagai lokasi latihan dan perlombaan dayung tingkat nasional. Pengunjung bisa menikmati berbagai aktivitas seru seperti perahu dayung, jet ski, kayak, atau sekadar memancing di tepi danau. Suasananya yang asri dengan latar belakang perbukitan menjadikan tempat ini populer di kalangan fotografer alam. Area sekitar danau juga dilengkapi dengan fasilitas olahraga dan area piknik yang nyaman untuk keluarga.`,
+           'Kec. Ciampel','~75 km dari Jakarta','Parkir luas, kamar ganti, warung')">
+        <div class="card-img-wrap">
+          <img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=600&q=75"
+               alt="Danau Cipule Karawang" loading="lazy"/>
+          <span class="card-category cat-alam">Alam</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-name">Danau Cipule</h3>
+          <div class="card-meta">
+            <span>📍 Kec. Ciampel</span>
+            <span>⏰ 07.00–17.00</span>
+          </div>
+          <p class="card-desc">Venue olahraga air tingkat nasional yang kini terbuka untuk wisata umum. Nikmati jet ski, kayak, perahu dayung, atau mancing di danau yang dikelilingi perbukitan hijau.</p>
+          <div class="card-footer">
+            <span class="card-price">Rp 10.000 / orang</span>
+            <span class="card-link">Lihat Detail →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Pantai Sedari -->
+      <div class="card reveal reveal-delay-2" data-cat="pantai"
+           onclick="openModal('Pantai Sedari','pantai',
+           'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=900&q=80',
+           'Kec. Cibuaya, Karawang Timur','07.00–18.00 WIB','Gratis',
+           `Pantai Sedari terletak di ujung timur Karawang, Kecamatan Cibuaya, dan merupakan salah satu pantai yang masih sangat alami dan belum terlalu ramai wisatawan. Pantai ini dikelilingi oleh deretan pohon-pohon rindang dan memiliki pasir cokelat yang halus dengan ombak yang cukup tenang. Keistimewaan Pantai Sedari adalah ekosistem mangrove di sekitarnya yang masih terjaga dengan baik, menjadikannya tempat yang sempurna untuk birdwatching dan menikmati keindahan alam yang autentik. Sunset di Pantai Sedari dikenal sangat indah dengan siluet pepohonan yang dramatis.`,
+           'Kec. Cibuaya, Karawang Timur','~110 km dari Jakarta','Parkir, warung sederhana')">
+        <div class="card-img-wrap">
+          <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=600&q=75"
+               alt="Pantai Sedari" loading="lazy"/>
+          <span class="card-category cat-pantai">Pantai</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-name">Pantai Sedari</h3>
+          <div class="card-meta">
+            <span>📍 Kec. Cibuaya</span>
+            <span>⏰ 07.00–18.00</span>
+          </div>
+          <p class="card-desc">Surga tersembunyi di ujung timur Karawang. Ekosistem mangrove yang terjaga, pepohonan rindang, dan ketenangan abadi menjadikannya pelarian sempurna dari riuhnya kota.</p>
+          <div class="card-footer">
+            <span class="card-price">Gratis</span>
+            <span class="card-link">Lihat Detail →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. New Marigold Garden -->
+      <div class="card reveal" data-cat="rekreasi"
+           onclick="openModal('New Marigold Garden','rekreasi',
+           'https://images.unsplash.com/photo-1490750967868-88df5691cc8e?w=900&q=80',
+           'Kec. Purwasari, Karawang','08.00–17.00 WIB','Rp 15.000',
+           `New Marigold Garden di Kecamatan Purwasari adalah taman bunga yang memadukan wisata alam dengan edukasi. Hamparan bunga warna-warni seluas satu hektar ini menjadi magnet bagi anak muda Karawang yang gemar berfoto. Bunga-bunga ditanam bergelombang sehingga dari atas tampak seperti karpet warna-warni yang sangat fotogenik. Yang membuat taman ini unik adalah kehadiran replika dinosaurus berbagai ukuran yang ditempatkan di area bertema berbeda, menjadikannya destinasi edukatif yang menyenangkan untuk anak-anak. Area selfie dengan dekorasi kreatif tersebar di seluruh penjuru taman.`,
+           'Kec. Purwasari','~70 km dari Jakarta','Parkir, toilet, warung')">
+        <div class="card-img-wrap">
+          <img src="https://images.unsplash.com/photo-1490750967868-88df5691cc8e?w=600&q=75"
+               alt="New Marigold Garden" loading="lazy"/>
+          <span class="card-category cat-rekreasi">Rekreasi</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-name">New Marigold Garden</h3>
+          <div class="card-meta">
+            <span>📍 Kec. Purwasari</span>
+            <span>⏰ 08.00–17.00</span>
+          </div>
+          <p class="card-desc">Hamparan bunga warna-warni seluas 1 hektar dengan replika dinosaurus yang menggemaskan. Surga foto instagramable dengan harga tiket yang sangat ramah di kantong.</p>
+          <div class="card-footer">
+            <span class="card-price">Rp 15.000 / orang</span>
+            <span class="card-link">Lihat Detail →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. Curug Bandung -->
+      <div class="card reveal reveal-delay-1" data-cat="alam"
+           onclick="openModal('Curug Bandung','alam',
+           'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&q=80',
+           'Kec. Tegalwaru, Karawang','06.00–17.00 WIB','Rp 10.000',
+           `Curug Bandung adalah kawasan wisata air terjun yang unik karena dalam satu kawasan terdapat tujuh air terjun sekaligus, termasuk Curug Peteuy dan beberapa curug lainnya yang berjajar indah. Lokasinya di Kecamatan Tegalwaru, berdekatan dengan Curug Cigentis. Untuk mencapai semua air terjun, pengunjung perlu melakukan trekking melewati jalur alam yang cukup menantang namun sangat indah, dikelilingi hutan tropis dengan berbagai jenis tanaman dan satwa liar. Debit air yang cukup deras dan kolam-kolam alami di bawah setiap curug menjadi daya tarik tersendiri untuk berenang dan bermain air.`,
+           'Kec. Tegalwaru','~100 km dari Jakarta','Parkir, warung')">
+        <div class="card-img-wrap">
+          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=75"
+               alt="Curug Bandung" loading="lazy"/>
+          <span class="card-category cat-alam">Alam</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-name">Curug Bandung</h3>
+          <div class="card-meta">
+            <span>📍 Kec. Tegalwaru</span>
+            <span>⏰ 06.00–17.00</span>
+          </div>
+          <p class="card-desc">Kawasan unik dengan tujuh air terjun dalam satu jalur trekking. Nikmati petualangan alam dan kesegaran kolam alami yang tersebar di antara hutan tropis yang lebat.</p>
+          <div class="card-footer">
+            <span class="card-price">Rp 10.000 / orang</span>
+            <span class="card-link">Lihat Detail →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. Kampung Turis -->
+      <div class="card reveal reveal-delay-2" data-cat="rekreasi"
+           onclick="openModal('Kampung Turis Karawang','rekreasi',
+           'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=900&q=80',
+           'Kec. Telukjambe Timur, Galuh Mas','08.00–21.00 WIB','Rp 25.000',
+           `Kampung Turis Karawang adalah destinasi wisata terpadu yang memadukan konsep wisata air, kuliner, dan rekreasi keluarga dalam satu kawasan yang luas di Galuh Mas, Kecamatan Telukjambe Timur. Fasilitas utamanya adalah kolam renang outdoor bertema tropis yang luas dan sejuk. Area kuliner menawarkan berbagai pilihan makanan lokal dan modern, termasuk restoran apung di atas kolam ikan yang instagramable. Selain itu terdapat wahana perahu bebek, spot foto dekoratif, dan area bermain anak. Tempat ini sangat cocok untuk gathering keluarga besar maupun acara komunitas.`,
+           'Galuh Mas, Kec. Telukjambe Timur','~65 km dari Jakarta','Parkir luas, kamar ganti, mushola')">
+        <div class="card-img-wrap">
+          <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=75"
+               alt="Kampung Turis Karawang" loading="lazy"/>
+          <span class="card-category cat-rekreasi">Rekreasi</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-name">Kampung Turis</h3>
+          <div class="card-meta">
+            <span>📍 Galuh Mas</span>
+            <span>⏰ 08.00–21.00</span>
+          </div>
+          <p class="card-desc">Destinasi wisata terpadu dengan kolam renang, restoran apung, perahu bebek, dan spot foto kreatif. Pilihan lengkap untuk liburan keluarga sepanjang hari di Karawang.</p>
+          <div class="card-footer">
+            <span class="card-price">Rp 25.000 / orang</span>
+            <span class="card-link">Lihat Detail →</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ GALLERY STRIP ══════ -->
+<div class="gallery-strip">
+  <div class="gallery-track" id="galleryTrack">
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=70" alt="pantai" loading="lazy"/></div>
+    <div class="gallery-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Candi_Jiwa%2C_Situs_Batujaya%2C_Karawang.jpg/640px-Candi_Jiwa%2C_Situs_Batujaya%2C_Karawang.jpg" onerror="this.src='https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=400&q=70'" alt="candi" loading="lazy"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1511576661531-b34d7da5d0bb?w=400&q=70" alt="curug" loading="lazy"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=400&q=70" alt="danau" loading="lazy"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=400&q=70" alt="pantai sedari" loading="lazy"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1490750967868-88df5691cc8e?w=400&q=70" alt="taman bunga" loading="lazy"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=70" alt="air terjun" loading="lazy"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1471922694854-ff1b63b20054?w=400&q=70" alt="pantai" loading="lazy"/></div>
+    <!-- duplicate for seamless loop -->
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=70" alt="pantai" loading="lazy"/></div>
+    <div class="gallery-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Candi_Jiwa%2C_Situs_Batujaya%2C_Karawang.jpg/640px-Candi_Jiwa%2C_Situs_Batujaya%2C_Karawang.jpg" onerror="this.src='https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=400&q=70'" alt="candi" loading="lazy"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1511576661531-b34d7da5d0bb?w=400&q=70" alt="curug" loading="lazy"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=400&q=70" alt="danau" loading="lazy"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=400&q=70" alt="pantai sedari" loading="lazy"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1490750967868-88df5691cc8e?w=400&q=70" alt="taman bunga" loading="lazy"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=70" alt="air terjun" loading="lazy"/></div>
+    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1471922694854-ff1b63b20054?w=400&q=70" alt="pantai" loading="lazy"/></div>
+  </div>
+</div>
+
+<!-- ══════ FEATURED ══════ -->
+<section class="featured" id="featured">
+  <div class="featured-inner">
+    <div class="featured-img">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Candi_Jiwa%2C_Situs_Batujaya%2C_Karawang.jpg/1280px-Candi_Jiwa%2C_Situs_Batujaya%2C_Karawang.jpg"
+           onerror="this.src='https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=800&q=80'"
+           alt="Situs Batujaya" />
+    </div>
+    <div class="featured-text">
+      <span class="section-tag">✦ Destinasi Unggulan</span>
+      <h2 class="section-title">Situs Batujaya<br><em style="font-family:'Playfair Display',serif;font-style:italic;color:var(--ochre)">Warisan Abad ke-4</em></h2>
+      <div class="divider"></div>
+      <p class="featured-body">Kompleks percandian Batujaya adalah situs arkeologi paling signifikan di Jawa Barat. Dengan 46 titik sebaran candi dalam area seluas 5 km², situs ini diyakini sebagai percandian tertua di Indonesia — bahkan lebih tua dari Borobudur. Dibangun oleh Kerajaan Tarumanegara pada abad ke-4 hingga ke-5 Masehi, situs ini menjadi bukti kejayaan peradaban Nusantara jauh sebelum era kerajaan-kerajaan besar.</p>
+      <div class="featured-facts">
+        <div class="fact">
+          <div class="fact-label">Lokasi</div>
+          <div class="fact-value">Batujaya, Karawang</div>
+        </div>
+        <div class="fact">
+          <div class="fact-label">Periode</div>
+          <div class="fact-value">Abad 4 – 5 Masehi</div>
+        </div>
+        <div class="fact">
+          <div class="fact-label">Luas Area</div>
+          <div class="fact-value">±5 km²</div>
+        </div>
+        <div class="fact">
+          <div class="fact-label">Jumlah Situs</div>
+          <div class="fact-value">46 Titik Candi</div>
+        </div>
+      </div>
+      <a href="https://id.wikipedia.org/wiki/Percandian_Batujaya" target="_blank" rel="noopener" class="btn-outline">
+        Baca Selengkapnya
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ TIPS ══════ -->
+<section class="tips" id="tips">
+  <div class="container">
+    <div style="text-align:center;max-width:600px;margin:0 auto 1rem;">
+      <span class="section-tag reveal">Panduan Wisatawan</span>
+      <h2 class="section-title reveal reveal-delay-1">Tips Sebelum<br>Berangkat ke Karawang</h2>
+      <div class="divider reveal reveal-delay-2" style="margin:1rem auto;"></div>
+    </div>
+    <div class="tips-grid">
+      <div class="tip-card reveal">
+        <span class="tip-icon">🚗</span>
+        <h3 class="tip-title">Akses & Transportasi</h3>
+        <p class="tip-text">Karawang mudah dijangkau dari Jakarta via Tol Jakarta–Cikampek (±60–90 menit). Tersedia juga kereta commuter dari Stasiun Jatinegara. Untuk wisata pantai di Cilamaya, sebaiknya gunakan kendaraan pribadi.</p>
+      </div>
+      <div class="tip-card reveal reveal-delay-1">
+        <span class="tip-icon">☀️</span>
+        <h3 class="tip-title">Waktu Terbaik</h3>
+        <p class="tip-text">Musim kemarau (April–Oktober) adalah waktu terbaik. Untuk pantai, datang pagi hari atau sore menjelang sunset. Hindari berkunjung ke curug saat musim hujan karena arus bisa berbahaya.</p>
+      </div>
+      <div class="tip-card reveal reveal-delay-2">
+        <span class="tip-icon">💰</span>
+        <h3 class="tip-title">Budget Wisata</h3>
+        <p class="tip-text">Karawang sangat ramah di kantong. Tiket masuk rata-rata Rp 5.000–Rp 25.000. Siapkan budget Rp 100.000–Rp 200.000 per orang sudah cukup untuk menikmati satu destinasi plus makan dan oleh-oleh.</p>
+      </div>
+      <div class="tip-card reveal reveal-delay-3">
+        <span class="tip-icon">🎒</span>
+        <h3 class="tip-title">Yang Perlu Dibawa</h3>
+        <p class="tip-text">Sunscreen & topi untuk pantai, sepatu trekking untuk curug, baju ganti, air minum yang cukup. Kamera untuk mengabadikan momen. Jangan lupa power bank karena sinyal di beberapa area masih terbatas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ MAP ══════ -->
+<section class="map-section" id="peta">
+  <div class="container">
+    <span class="section-tag reveal">Navigasi</span>
+    <h2 class="section-title reveal reveal-delay-1" style="margin-bottom:2.5rem">Temukan Lokasinya</h2>
+    <div class="map-inner">
+      <div class="map-legend reveal">
+        <div class="legend-item">
+          <div class="legend-dot" style="background:var(--navy)"></div>
+          <div>
+            <div class="legend-name">Candi Jiwa (Batujaya)</div>
+            <div class="legend-dist">~85 km dari Jakarta</div>
+          </div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:var(--teal)"></div>
+          <div>
+            <div class="legend-name">Pantai Pelangi (Pedes)</div>
+            <div class="legend-dist">~90 km dari Jakarta</div>
+          </div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:var(--teal)"></div>
+          <div>
+            <div class="legend-name">Pantai Tanjung Baru</div>
+            <div class="legend-dist">~100 km dari Jakarta</div>
+          </div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:var(--forest)"></div>
+          <div>
+            <div class="legend-name">Curug Cigentis</div>
+            <div class="legend-dist">~100 km dari Jakarta</div>
+          </div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:var(--forest)"></div>
+          <div>
+            <div class="legend-name">Danau Cipule</div>
+            <div class="legend-dist">~75 km dari Jakarta</div>
+          </div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:var(--rust)"></div>
+          <div>
+            <div class="legend-name">Kampung Turis (Galuh Mas)</div>
+            <div class="legend-dist">~65 km dari Jakarta</div>
+          </div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:var(--ochre)"></div>
+          <div>
+            <div class="legend-name">New Marigold Garden</div>
+            <div class="legend-dist">~70 km dari Jakarta</div>
+          </div>
+        </div>
+      </div>
+      <div class="map-embed reveal reveal-delay-1">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d253985.9090399547!2d107.04344435!3d-6.3182979!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e698b74eec00001%3A0x14b00bba82b6a60c!2sKarawang%2C%20West%20Java!5e0!3m2!1sen!2sid!4v1700000000000"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Peta Karawang">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ FOOTER ══════ -->
+<footer id="kontak">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand">KARAWANG</div>
+        <p class="footer-tagline">Panduan wisata lengkap Kabupaten Karawang — dari pantai utara yang memesona, situs sejarah peradaban tertua di Jawa, hingga alam pegunungan yang asri.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-btn" aria-label="Instagram">IG</a>
+          <a href="#" class="social-btn" aria-label="YouTube">YT</a>
+          <a href="#" class="social-btn" aria-label="TikTok">TK</a>
+          <a href="#" class="social-btn" aria-label="Facebook">FB</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Destinasi</h4>
+        <ul>
+          <li>Candi Jiwa</li>
+          <li>Pantai Pelangi</li>
+          <li>Curug Cigentis</li>
+          <li>Danau Cipule</li>
+          <li>Pantai Sedari</li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Kategori</h4>
+        <ul>
+          <li>🌊 Wisata Pantai</li>
+          <li>🏛️ Wisata Sejarah</li>
+          <li>🌿 Wisata Alam</li>
+          <li>🎡 Wisata Rekreasi</li>
+          <li>🍜 Kuliner Lokal</li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Informasi</h4>
+        <ul>
+          <li>Tips Perjalanan</li>
+          <li>Peta Wisata</li>
+          <li>Cuaca Karawang</li>
+          <li>Penginapan</li>
+          <li>Kontak Kami</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Karawang Tourism Guide. Dibuat dengan ❤️ untuk Karawang.</span>
+      <span>Sumber foto: Unsplash, Wikimedia Commons</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════ MODAL ══════ -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBg(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <img id="modalImg" src="" alt="" class="modal-img" />
+    <div class="modal-body">
+      <p class="modal-category" id="modalCat"></p>
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <div class="modal-meta" id="modalMeta"></div>
+      <p class="modal-desc" id="modalDesc"></p>
+      <div class="modal-info" id="modalInfo"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ JAVASCRIPT ══════ -->
+<script>
+  /* ── NAV scroll ── */
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  /* ── Mobile menu ── */
+  function toggleMenu() {
+    document.getElementById('navLinks').classList.toggle('open');
+  }
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+  });
+
+  /* ── Filter tabs ── */
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      const filter = this.dataset.filter;
+      document.querySelectorAll('.card').forEach(card => {
+        const match = filter === 'all' || card.dataset.cat === filter;
+        card.classList.toggle('hidden', !match);
+        if (match) {
+          card.style.animation = 'none';
+          requestAnimationFrame(() => {
+            card.style.animation = '';
+            card.style.animationName = 'fadeUp';
+            card.style.animationDuration = '0.4s';
+            card.style.animationFillMode = 'both';
+          });
+        }
+      });
+    });
+  });
+
+  /* ── Scroll reveal ── */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  /* ── Modal ── */
+  function openModal(title, cat, img, location, hours, price, desc, addr, dist, facilities) {
+    const catLabels = { pantai:'🌊 Wisata Pantai', sejarah:'🏛️ Wisata Sejarah', alam:'🌿 Wisata Alam', rekreasi:'🎡 Wisata Rekreasi' };
+    document.getElementById('modalImg').src = img;
+    document.getElementById('modalImg').alt = title;
+    document.getElementById('modalCat').textContent = catLabels[cat] || cat;
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalMeta').innerHTML =
+      `<span>📍 ${location}</span><span>⏰ ${hours}</span><span>💰 ${price}</span>`;
+    document.getElementById('modalDesc').textContent = desc;
+    document.getElementById('modalInfo').innerHTML = `
+      <div class="info-item"><div class="info-label">Alamat</div><div class="info-val">${addr}</div></div>
+      <div class="info-item"><div class="info-label">Jarak</div><div class="info-val">${dist}</div></div>
+      <div class="info-item"><div class="info-label">Fasilitas</div><div class="info-val">${facilities}</div></div>
+    `;
+    document.getElementById('modalOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function closeModalOnBg(e) {
+    if (e.target === document.getElementById('modalOverlay')) closeModal();
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>
